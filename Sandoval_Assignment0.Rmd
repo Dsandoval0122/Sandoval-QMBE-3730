@@ -1,0 +1,104 @@
+---
+title: "Sandoval-Netflix Dataset Analysis"
+author: "Dominic Sandoval"
+date: "2026-01-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+getwd()
+setwd("/Users/dominics./downloads")
+# Load libraries
+library(tidyverse)
+library(ggplot2)
+
+# Load dataset
+netflix <- read.csv("netflix_titles (1).csv")
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+## Summary of dataset
+summary(netflix)
+str(netflix)
+dim(netflix)
+head (`netflix_titles.(1)`)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r 2.}
+# Convert date_added to Date format
+netflix$date_added <- as.Date(netflix$date_added, format = "%B %d, %Y")
+
+# Check missing values
+colSums(is.na(netflix))
+
+netflix <- netflix %>%
+  mutate(
+    duration_num = as.numeric(str_extract(duration, "\\d+")),
+    duration_type = ifelse(type == "Movie", "Minutes", "Seasons")
+  )
+
+```
+``` {r}
+## Movies Vs. TV Shows Bar Graph
+
+netflix %>%
+  count(type) %>%
+  ggplot(aes(type, n)) +
+  geom_col(fill="red") +
+  labs(
+    title = "Distribution of Netflix Content",
+    x = "Content Type",
+    y = "Number of Content"
+  ) +
+  theme_minimal()
+
+
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+netflix %>%
+  separate_rows(listed_in, sep = ", ") %>%
+  count(listed_in, sort = TRUE) %>%
+  slice_head(n = 10) %>%
+  ggplot(aes(reorder(listed_in, n), n)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Netflix Genres",
+    x = "Genre",
+    y = "Number of Titles"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+netflix %>%
+  separate_rows(country, sep = ", ") %>%
+  count(country, sort = TRUE) %>%
+  top_n(10) %>%
+  ggplot(aes(reorder(country, n), n)) +
+  geom_col(fill="green") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Content-Producing Countries on Netflix",
+    x = "Country",
+    y = "Number of Titles"
+  ) +
+  theme_minimal()
+```
+
+## **Final Analysis and Thoughts:** 
+  Overall, these basic visuals that I havew created demonstrate a variety of different inisghts. For example, Netflix is seemingly more geared to creating and releasing Movie based content compared to seasonal TV shows that viewers can binge watch. While this inisight may be somewhat interesting, it is important to note that tht vast najority of these titles released were international titles and dramas. While this may not necessarily mean anything to begin with, the next chart reveals that the United States heavily outproduces the rest of the world in creating content. Even though this may be the case, the second graph created can highlight how the creation international titiles is still a major strategy when it comes to Netflix's products. This has proven to be very successful for Netflix, with international TV Shows such as "Squid Games" dominating ratings over recent years, even in the United States. 
