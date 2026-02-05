@@ -28,6 +28,7 @@ sum(is.na(College))
 
 ggplot(College, aes(x =pop, y = rent)) +
   geom_point(alpha = 0.5, color="darkblue") +
+  geom_smooth(method = "lm", se = TRUE, color="darkblue") 
   ggtitle("Scatterplot: Population of Town vs Rent Price") +
   xlab("Population") +
   ylab("Rent Price ($)") +
@@ -36,6 +37,7 @@ ggplot(College, aes(x =pop, y = rent)) +
 # Rent Vs. Average Income 
 ggplot(College, aes(x =avginc, y = rent)) +
   geom_point(alpha = 0.7, color="cyan") +
+  geom_smooth(method = "lm", se = TRUE, color="cyan") 
   ggtitle("Scatterplot: Average Income vs Rent Price") +
   xlab("Rent Occupied Units") +
   ylab("Rent Price ($)") +
@@ -45,6 +47,7 @@ ggplot(College, aes(x =avginc, y = rent)) +
 
 ggplot(College, aes(x =enroll, y = rent)) +
   geom_point(alpha = 0.5, color="red") +
+  geom_smooth(method = "lm", se = TRUE, color="red") +
   ggtitle("Scatterplot: College Enrollment vs Rent Price") +
   xlab("College Enrollment") +
   ylab("Rent Price ($)") +
@@ -54,6 +57,7 @@ ggplot(College, aes(x =enroll, y = rent)) +
 
 ggplot(College, aes(x =rnthsg, y = rent)) +
   geom_point(alpha = 0.5, color="orange") +
+  geom_smooth(method = "lm", se = TRUE, color="orange") +
   ggtitle("Scatterplot: Rent Occupied Units vs Rent Price") +
   xlab("Rent Occupied Units") +
   ylab("Rent Price ($)") +
@@ -62,6 +66,7 @@ ggplot(College, aes(x =rnthsg, y = rent)) +
 # Rent Vs. Occupied Housing Units 
 ggplot(College, aes(x =tothsg, y = rent)) +
   geom_point(alpha = 0.5, color="green") +
+  geom_smooth(method = "lm", se = TRUE, color="green") 
   ggtitle("Scatterplot: Occupied Housing Units vs Rent Price") +
   xlab("Occupied Housing Units") +
   ylab("Rent Price ($)") +
@@ -71,6 +76,7 @@ ggplot(College, aes(x =tothsg, y = rent)) +
 
 ggplot(College, aes(x =pctstu, y = rent)) +
   geom_point(alpha = 0.5, color="blue") +
+  geom_smooth(method = "lm", se = TRUE) +
   ggtitle("Scatterplot: Percentage of College Students vs Rent Price") +
   xlab("Percentage of College Students") +
   ylab("Rent Price ($)") +
@@ -91,7 +97,7 @@ heatmap(correlation_matrix)
 
 # Base Multiple Regression Model for College Data set 
 
-model_multi <- lm(rent ~ ., data = College)
+model_multi <- lm(rent ~ pop + rnthsg + avginc + tothsg + pctstu + enroll, data = College)
 summary(model_multi)
 
 ## Important Notes: 
@@ -162,3 +168,4 @@ predicted_rent <- exp(log_prediction)
 print(paste("Estimated Rent (Log-Log Model): $", round(predicted_rent, 2)))
 
 ## For a college town that has these data points, the predicted rent is expected to $646.44
+
